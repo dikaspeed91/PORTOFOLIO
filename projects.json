@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Leleshop",
+    "description": "E-commerce platform built with PHP for online shopping.",
+    "technologies": ["PHP", "MySQL"],
+    "github": "https://github.com/yourusername/leleshop",
+    "live": "https://leleshop.example.com",
+"image":"images/Leleshop beranda.png"
+  },
+  {
+    "name": "Rumah Sakit Manggelewa",
+    "description": "Hospital management system developed using PHP for patient records, appointments, etc.",
+    "technologies": ["PHP", "MySQL"],
+    "github": "https://github.com/yourusername/rumah-sakit-manggelewa",
+    "live": "https://rsmanggelewa.example.com",
+"image":"images/RS MANGGELEWA beranda.png"
+  }
+]
