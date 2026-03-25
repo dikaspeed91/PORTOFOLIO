@@ -1,0 +1,75 @@
+/* Custom Styles for Portfolio Website */
+
+:root {
+  --primary-color: #3b82f6;
+  --secondary-color: #10b981;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+}
+
+#projectsGrid .project-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#projectsGrid .project-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0,0, 0.1);
+}
+
+.message {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reply-message {
+  margin-left: 2rem;
+  border-left: 3px solid var(--primary-color);
+  background-color: rgba(59, 130, 246, 0.05);
+}
+
+#messagesContainer {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) transparent;
+}
+
+#messagesContainer::-webkit-scrollbar {
+  width: 6px;
+}
+
+#messagesContainer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#messagesContainer::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 3px;
+}
+
+/* Dark mode adjustments */
+.dark .project-card {
+  background: #1f2937;
+}
+
+.dark #messagesContainer {
+  background-color: #374151;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .reply-message {
+    margin-left: 1rem;
+  }
+}
