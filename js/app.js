@@ -6,18 +6,10 @@ const darkToggle = document.getElementById('darkToggle');
 const loginBtn = document.getElementById('loginBtn');
 const logoutBtn = document.getElementById('logoutBtn');
 const userInfo = document.getElementById('userInfo');
-const toggleChat = document.getElementById('toggleChat');
-const chatSection = document.getElementById('chatSection');
-const messagesContainer = document.getElementById('messagesContainer');
-const messageInput = document.getElementById('messageInput');
-const sendBtn = document.getElementById('sendBtn');
-const replyInfo = document.getElementById('replyInfo');
-const replyToMsg = document.getElementById('replyToMsg');
-const cancelReply = document.getElementById('cancelReply');
 const projectsGrid = document.getElementById('projectsGrid');
 
-let currentReplyId = null;
-let unsubscribeChats = null;
+
+
 
 // Dark Mode Toggle
 darkToggle.addEventListener('click', () => {
@@ -36,59 +28,42 @@ if (localStorage.getItem('darkMode') === 'true') {
 // Load Projects
 async function loadProjects() {
   try {
-    const response = await fetch('../projects.json');
+    const response = await fetch('./projects.json');
     const projects = await response.json();
     projectsGrid.innerHTML = projects.map(project => `
-      <div class="project-card bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg border">
-        <img src="${project.image}" alt="${project.name}" class="w-full h-48 object-cover rounded-lg mb-4">
-        <h3 class="text-2xl font-bold mb-2">${project.name}</h3>
-        <p class="text-gray-600 dark:text-gray-300 mb-4">${project.description}</p>
-        <p class="text-sm text-blue-600 mb-4 font-medium">Tech: ${project.technologies.join(', ')}</p>
-        <div class="flex gap-4">
-          <a href="${project.github}" target="_blank" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">GitHub</a>
-          <a href="${project.live}" target="_blank" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">Live Demo</a>
+      <div class="project-card">
+        <img src="${project.image}" alt="${project.name}" class="project-image">
+        <div class="project-content">
+          <h3 class="project-title">${project.name}</h3>
+          <p class="project-description">${project.description}</p>
+          <div class="project-tech">
+            ${project.technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
+          </div>
+          <div class="project-buttons">
+            <a href="${project.github}" target="_blank" class="btn btn-secondary">GitHub</a>
+            <a href="${project.live}" target="_blank" class="btn btn-primary">Live Demo</a>
+          </div>
         </div>
       </div>
     `).join('');
   } catch (error) {
     console.error('Error loading projects:', error);
-    projectsGrid.innerHTML = '<p class="col-span-full text-center text-gray-500">Projects loading...</p>';
+    projectsGrid.innerHTML = '<p class="text-center text-gray-500 py-8">Projects data not found. Check projects.json exists.</p>';
   }
 }
 
-// Auth Listeners
-auth.onAuthStateChanged((user) => {
-  console.log('Auth state changed:', user ? 'Logged in' : 'Logged out');
-}, (error) => {
-  console.error('Auth listener error:', error);
-  alert('Auth error: ' + error.message);
-});
-  if (user) {
-    userInfo.textContent = user.displayName || user.email;
-    userInfo.classList.remove('hidden');
-    loginBtn.classList.add('hidden');
-    logoutBtn.classList.remove('hidden');
-    loadChat();
-  } else {
-    userInfo.classList.add('hidden');
-    loginBtn.classList.remove('hidden');
-    logoutBtn.classList.add('hidden');
-    if (unsubscribeChats) unsubscribeChats();
-    chatSection.classList.add('hidden');
-    toggleChat.textContent = 'Open Chat Room';
-    messagesContainer.innerHTML = '';
-  }
-});
+// Projects load on init
+loadProjects();
 
 loginBtn.addEventListener('click', async () => {
+  const provider = prompt('Pilih login: google atau github') === 'github' 
+    ? new firebase.auth.GithubAuthProvider() 
+    : new firebase.auth.GoogleAuthProvider();
   try {
-  const provider = new firebase.auth.GoogleAuthProvider();
-  // For GitHub: const provider = new firebase.auth.GithubAuthProvider();
-  // Enable GitHub in Firebase Console > Auth > Sign-in method > GitHub
-    auth.signInWithPopup(provider);
+    await auth.signInWithPopup(provider);
   } catch (error) {
     console.error('Login error:', error);
-    alert(`Login gagal: ${error.message}. Cek console dan Firebase config.`);
+    alert(`Login gagal: ${error.message}\nPastikan Google/GitHub enabled di Firebase Console > Auth > Sign-in method`);
   }
 });
 
@@ -97,39 +72,45 @@ logoutBtn.addEventListener('click', () => {
 });
 
 // Chat Toggle
-toggleChat.addEventListener('click', () => {
-  if (!auth.currentUser) {
-    alert('Please login to use chat!');
-    return;
-  }
-  chatSection.classList.toggle('hidden');
-  toggleChat.textContent = chatSection.classList.contains('hidden') ? 'Open Chat Room' : 'Close Chat Room';
-});
+toggleChat.addEventListener('click', toggleChatVisibility);
 
 // Chat Functions
 function loadChat() {
   if (unsubscribeChats) unsubscribeChats();
   unsubscribeChats = chatCollection.orderBy('timestamp', 'desc').limit(50).onSnapshot((snapshot) => {
     messagesContainer.innerHTML = '';
+    const fragments = [];
     snapshot.forEach((doc) => {
       const msg = doc.data();
       const div = document.createElement('div');
-      div.className = `message p-4 rounded-lg ${msg.replyTo ? 'reply-message bg-blue-50 dark:bg-blue-950' : 'bg-white dark:bg-gray-700 shadow-sm'}`;
+      div.className = `message p-4 rounded-lg mb-3 ${msg.replyTo ? 'reply-message bg-blue-50 dark:bg-blue-950 border-l-4 border-blue-500' : 'bg-white dark:bg-gray-700 shadow-sm'}`;
       div.innerHTML = `
         <div class="flex items-start gap-3 mb-1">
-          <img src="${msg.photoURL || '/default-avatar.png'}" alt="avatar" class="w-10 h-10 rounded-full">
-          <div>
-            <strong>${msg.userName}</strong>
-            <span class="text-xs text-gray-500 ml-2">${new Date(msg.timestamp.toDate()).toLocaleString()}</span>
+          <img src="${msg.photoURL || 'https://via.placeholder.com/40?text=👤'}" alt="avatar" class="w-10 h-10 rounded-full object-cover">
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 mb-1">
+              <strong class="truncate">${msg.userName}</strong>
+              <span class="text-xs text-gray-500">${new Date(msg.timestamp.toDate()).toLocaleString()}</span>
+            </div>
+            <p class="break-words">${msg.text}</p>
           </div>
         </div>
-        <p>${msg.text}</p>
-        ${msg.replyTo ? `<button onclick="replyTo('${doc.id}')" class="mt-2 text-sm text-blue-600 hover:underline">Reply</button>` : ''}
+        ${msg.replyTo ? `<button onclick="replyTo('${doc.id}')" class="mt-2 text-sm text-blue-600 hover:underline font-medium">↳ Reply</button>` : ''}
       `;
-      messagesContainer.appendChild(div);
+      fragments.unshift(div); // Prepend for newest first
     });
-    messagesContainer.scrollTop = 0; // Newest first
+    fragments.forEach(div => messagesContainer.appendChild(div));
+    messagesContainer.scrollTop = 0;
   });
+}
+
+function toggleChatVisibility() {
+  if (!auth.currentUser) {
+    alert('Silakan login untuk menggunakan chat!');
+    return;
+  }
+  chatSection.classList.toggle('hidden');
+  toggleChat.textContent = chatSection.classList.contains('hidden') ? '💬 Open Chat Room' : '❌ Close Chat Room';
 }
 
 window.replyTo = (msgId, text = '') => {

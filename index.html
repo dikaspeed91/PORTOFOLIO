@@ -1,595 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome L Portafolio - M. Andika Nur Allanuril</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --eva-green: #00FF41;
-            --eva-purple: #8B00FF;
-            --eva-orange: #FF4500;
-            --eva-dark: #0a0a0a;
-            --card-bg: rgba(20, 20, 40, 0.9);
-            --text-primary: #ffffff;
-            --text-secondary: #b3b3b3;
-            --glow-green: 0 0 20px rgba(0, 255, 65, 0.6);
-            --shadow-main: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Rajdhani', 'Inter', sans-serif;
-            background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.5)), url('images/1.jpg') center/cover fixed;
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header */
-        header {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 2px solid var(--eva-green);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--glow-green);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 0;
-        }
-
-        .portfolio-title {
-            font-size: clamp(1.5rem, 4vw, 2rem);
-            font-weight: 700;
-            color: var(--eva-green);
-            text-shadow: var(--glow-green);
-            letter-spacing: 2px;
-            animation: neonFlicker 2s infinite alternate;
-        }
-
-        .nav-actions {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .btn-primary {
-            background: linear-gradient(45deg, var(--eva-purple), var(--eva-orange));
-            color: white;
-            box-shadow: 0 5px 15px rgba(139, 0, 255, 0.4);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(139, 0, 255, 0.6);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-primary);
-            border: 1px solid var(--eva-green);
-        }
-
-        .btn-secondary:hover {
-            background: var(--eva-green);
-            color: #000;
-            box-shadow: var(--glow-green);
-        }
-
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 8rem 0 6rem;
-        }
-
-        .hero img {
-            width: clamp(150px, 25vw, 220px);
-            height: clamp(150px, 25vw, 220px);
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 2rem;
-            border: 4px solid var(--eva-green);
-            box-shadow: var(--glow-green), 0 0 50px rgba(0, 255, 65, 0.3);
-        }
-
-        .hero h1 {
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            font-weight: 700;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            color: var(--text-secondary);
-            max-width: 700px;
-            margin: 0 auto 3rem;
-            line-height: 1.7;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        /* Section */
-        .section {
-            padding: 6rem 0;
-        }
-
-        .section-title {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 4rem;
-            background: linear-gradient(45deg, var(--eva-green), var(--eva-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: none;
-        }
-
-        /* Skills Grid */
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            justify-items: center;
-        }
-
-        .skill-card {
-            width: 250px;
-            height: 280px;
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 2.5rem 1.5rem;
-            text-align: center;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid rgba(0, 255, 65, 0.3);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            overflow: hidden;
-            box-shadow: var(--glow-green);
-        }
-
-        .skill-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--eva-green), var(--eva-purple));
-        }
-
-        .skill-card:hover {
-            transform: translateY(-15px) scale(1.05);
-            box-shadow: 0 30px 60px rgba(0, 255, 65, 0.4);
-            border-color: var(--eva-green);
-        }
-
-        .skill-logo {
-            width: 90px;
-            height: 90px;
-            margin: 0 auto 1.5rem;
-            object-fit: contain;
-            transition: all 0.3s ease;
-        }
-
-        .skill-card:hover .skill-logo {
-            transform: scale(1.15) rotate(360deg);
-            filter: drop-shadow(0 0 25px var(--eva-green));
-        }
-
-        .skill-name {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-        }
-
-        .skill-bar-container {
-            height: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            overflow: hidden;
-            margin-bottom: 1rem;
-        }
-
-        .skill-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--eva-green), #00cc33);
-            border-radius: 6px;
-            width: 0%;
-            transition: width 1.8s ease-out;
-            box-shadow: 0 0 15px var(--eva-green);
-            position: relative;
-        }
-
-        .skill-percent {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--eva-green);
-            text-shadow: 0 0 10px currentColor;
-        }
-
-        /* Projects */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-            gap: 2.5rem;
-        }
-
-        .project-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            overflow: hidden;
-            transition: all 0.4s ease;
-            box-shadow: var(--shadow-main);
-            border: 1px solid rgba(0, 255, 65, 0.2);
-        }
-
-        .project-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 40px 80px rgba(0, 255, 65, 0.3);
-        }
-
-        .project-image {
-            width: 100%;
-            height: 240px;
-            object-fit: cover;
-        }
-
-        .project-content {
-            padding: 2rem;
-        }
-
-        .project-title {
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-        }
-
-        .project-description {
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-        }
-
-        .project-tech {
-            display: flex;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .tech-tag {
-            background: rgba(0, 255, 65, 0.2);
-            color: var(--eva-green);
-            padding: 0.4rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            border: 1px solid rgba(0, 255, 65, 0.3);
-        }
-
-        .project-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .skills-grid, .projects-grid {
-                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            }
-        }
-
-        @media (max-width: 768px) {
-            .nav-actions {
-                gap: 0.5rem;
-            }
-
-            .hero {
-                padding: 6rem 0 4rem;
-            }
-
-            .skills-grid, .projects-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .social-links {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .project-buttons {
-                flex-direction: column;
-            }
-        }
-
-        @keyframes neonFlicker {
-            0%, 100% { opacity: 1; text-shadow: 0 0 10px var(--eva-green), 0 0 20px var(--eva-green); }
-            50% { opacity: 0.95; text-shadow: 0 0 5px var(--eva-green), 0 0 15px var(--eva-green); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s ease;
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
+    <title>Skills Visualizer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <nav class="container">
-            <div class="portfolio-title">Welcome L Portafolio</div>
-            <div class="nav-actions">
-                <a href="#contact" class="btn btn-secondary">
-                    <i class="fas fa-envelope"></i>
-                    Contact
-                </a>
-                <button class="btn btn-primary" onclick="toggleChat()">
-                    <i class="fas fa-comments"></i>
-                    Chat
-                </button>
-            </div>
-        </nav>
-    </header>
-
-    <main>
-        <!-- Hero -->
-        <section class="hero reveal" id="hero">
-            <div class="container">
-                <img src="images/Me.jpeg" alt="M. Andika Nur Allanuril">
-                <h1>M. Andika Nur Allanuril</h1>
-                <p>Developer PHP berpengalaman membangun aplikasi web seperti e-commerce dan sistem rumah sakit. Siap berkolaborasi!</p>
-                <div class="social-links">
-                    <a href="https://github.com/dikaspeed91">
-                        <i class="fab fa-github"></i> GitHub
-                    </a>
-                    <a href="https://linkedin.com/in/yourprofile">
-                        <i class="fab fa-linkedin"></i> LinkedIn
-                    </a>
-                    <a href="mailto:dikaspeed91@gmail.com">
-                        <i class="fas fa-envelope"></i> Email
-                    </a>
+    <div class="container">
+        <h1 class="title">My Skills</h1>
+        <div class="skills-grid">
+            <div class="skill-item" data-skill="95" data-name="PHP">
+                <img src="../images/PHP.png" alt="PHP" loading="lazy">
+                <div class="tooltip">
+                    <span class="skill-name">PHP</span>
+                    <div class="skill-bar">
+                        <div class="skill-progress"></div>
+                    </div>
+                    <span class="skill-percent">0%</span>
                 </div>
             </div>
-        </section>
-
-        <!-- Skills -->
-        <section class="section skills reveal" id="skills">
-            <div class="container">
-                <h2 class="section-title">Keahlian</h2>
-                <div class="skills-grid">
-                    <div class="skill-card" data-percent="80">
-                        <img src="images/PHP.png" alt="PHP" class="skill-logo">
-                        <h3 class="skill-name">PHP</h3>
-                        <div class="skill-bar-container">
-                            <div class="skill-bar" data-percent="80"></div>
-                        </div>
-                        <div class="skill-percent" data-percent="80">80%</div>
+            <div class="skill-item" data-skill="90" data-name="HTML">
+                <img src="../images/html.png" alt="HTML" loading="lazy">
+                <div class="tooltip">
+                    <span class="skill-name">HTML</span>
+                    <div class="skill-bar">
+                        <div class="skill-progress"></div>
                     </div>
-                    <div class="skill-card" data-percent="80">
-                        <img src="images/html.png" alt="HTML" class="skill-logo">
-                        <h3 class="skill-name">HTML</h3>
-                        <div class="skill-bar-container">
-                            <div class="skill-bar" data-percent="80"></div>
-                        </div>
-                        <div class="skill-percent" data-percent="80">80%</div>
-                    </div>
-                    <div class="skill-card" data-percent="80">
-                        <img src="images/CSS.png" alt="CSS" class="skill-logo">
-                        <h3 class="skill-name">CSS</h3>
-                        <div class="skill-bar-container">
-                            <div class="skill-bar" data-percent="80"></div>
-                        </div>
-                        <div class="skill-percent" data-percent="80">80%</div>
-                    </div>
-                    <div class="skill-card" data-percent="80">
-                        <img src="images/js.png" alt="JavaScript" class="skill-logo">
-                        <h3 class="skill-name">JavaScript</h3>
-                        <div class="skill-bar-container">
-                            <div class="skill-bar" data-percent="80"></div>
-                        </div>
-                        <div class="skill-percent" data-percent="80">80%</div>
-                    </div>
-                    <div class="skill-card" data-percent="80">
-                        <img src="images/PHYTON.png" alt="Python" class="skill-logo">
-                        <h3 class="skill-name">Python</h3>
-                        <div class="skill-bar-container">
-                            <div class="skill-bar" data-percent="80"></div>
-                        </div>
-                        <div class="skill-percent" data-percent="80">80%</div>
-                    </div>
-                    <div class="skill-card" data-percent="80">
-                        <img src="images/MySQL.png" alt="MySQL" class="skill-logo">
-                        <h3 class="skill-name">MySQL</h3>
-                        <div class="skill-bar-container">
-                            <div class="skill-bar" data-percent="80"></div>
-                        </div>
-                        <div class="skill-percent" data-percent="80">80%</div>
-                    </div>
+                    <span class="skill-percent">0%</span>
                 </div>
             </div>
-        </section>
-
-        <!-- Projects -->
-        <section class="section projects reveal" id="projects">
-            <div class="container">
-                <h2 class="section-title">My Projects</h2>
-                <div class="projects-grid">
-                    <div class="project-card">
-<img src="images/Leleshop beranda.png" alt="Leleshop" class="project-image">
-
-                        <div class="project-content">
-                            <h3 class="project-title">Leleshop</h3>
-                            <p class="project-description">E-commerce platform built with PHP for online shopping.</p>
-                            <div class="project-tech">
-                                <span class="tech-tag">PHP</span>
-                                <span class="tech-tag">MySQL</span>
-                            </div>
-                            <div class="project-buttons">
-                                <a href="#" class="btn btn-primary">View Code</a>
-                                <a href="#" class="btn btn-secondary">Live Demo</a>
-                            </div>
-                        </div>
+            <div class="skill-item" data-skill="90" data-name="CSS">
+                <img src="../images/CSS.png" alt="CSS" loading="lazy">
+                <div class="tooltip">
+                    <span class="skill-name">CSS</span>
+                    <div class="skill-bar">
+                        <div class="skill-progress"></div>
                     </div>
-                    <div class="project-card">
-<img src="images/RS MANGGELEWA beranda.png" alt="Rumah Sakit Manggelewa" class="project-image">
-
-                        <div class="project-content">
-                            <h3 class="project-title">Rumah Sakit Manggelewa</h3>
-                            <p class="project-description">Hospital management system for patient records & appointments.</p>
-                            <div class="project-tech">
-                                <span class="tech-tag">PHP</span>
-                                <span class="tech-tag">MySQL</span>
-                            </div>
-                            <div class="project-buttons">
-                                <a href="#" class="btn btn-primary">View Code</a>
-                                <a href="#" class="btn btn-secondary">Live Demo</a>
-                            </div>
-                        </div>
-                    </div>
+                    <span class="skill-percent">0%</span>
                 </div>
             </div>
-        </section>
-
-        <!-- Contact -->
-        <section class="section contact reveal" id="contact">
-            <div class="container">
-                <h2 class="section-title">Get In Touch</h2>
-                <p style="font-size: 1.25rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 3rem; text-align: center;">
-                    Siap berkolaborasi untuk membangun solusi digital yang impactful!
-                </p>
-                <div class="social-links" style="justify-content: center; max-width: 600px; margin: 0 auto;">
-                    <a href="mailto:dikaspeed91@gmail.com" class="btn btn-primary" style="font-size: 1.1rem;">
-                        <i class="fas fa-envelope"></i> Email Me
-                    </a>
-                    <a href="https://github.com/dikaspeed91" class="btn btn-secondary" style="font-size: 1.1rem;">
-                        <i class="fab fa-github"></i> GitHub
-                    </a>
-                    <a href="https://linkedin.com/in/yourprofile" class="btn btn-secondary" style="font-size: 1.1rem;">
-                        <i class="fab fa-linkedin"></i> LinkedIn
-                    </a>
+            <div class="skill-item" data-skill="85" data-name="JavaScript">
+                <img src="../images/js.png" alt="JavaScript" loading="lazy">
+                <div class="tooltip">
+                    <span class="skill-name">JavaScript</span>
+                    <div class="skill-bar">
+                        <div class="skill-progress"></div>
+                    </div>
+                    <span class="skill-percent">0%</span>
                 </div>
             </div>
-        </section>
-    </main>
-
-    <script>
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', e => {
-                e.preventDefault();
-                const target = document.querySelector(anchor.getAttribute('href'));
-                target.scrollIntoView({ behavior: 'smooth' });
-            });
-        });
-
-        // Skills animation
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const cards = entry.target.querySelectorAll('.skill-card');
-                    cards.forEach((card, index) => {
-                        setTimeout(() => {
-                            card.classList.add('active');
-                            const bar = card.querySelector('.skill-bar');
-                            const percentEl = card.querySelector('.skill-percent');
-                            const percent = bar.dataset.percent;
-                            setTimeout(() => {
-                                bar.style.width = percent + '%';
-                                animateCounter(percentEl, percent);
-                            }, 200);
-                        }, index * 150);
-                    });
-                }
-            });
-        }, { threshold: 0.2 });
-
-        observer.observe(document.querySelector('.skills'));
-
-        function animateCounter(element, target) {
-            let current = 0;
-            const increment = target / 50;
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    current = target;
-                    clearInterval(timer);
-                }
-                element.textContent = Math.floor(current) + '%';
-            }, 30);
-        }
-
-        // Reveal animations
-        const revealObserver = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        });
-
-        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-        // Navbar background on scroll
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('header');
-            if (window.scrollY > 100) {
-                header.style.background = 'rgba(255, 255, 255, 0.15)';
-            } else {
-                header.style.background = 'rgba(255, 255, 255, 0.1)';
-            }
-        });
-    </script>
+            <div class="skill-item" data-skill="80" data-name="Python">
+                <img src="../images/PHYTON.png" alt="Python" loading="lazy">
+                <div class="tooltip">
+                    <span class="skill-name">Python</span>
+                    <div class="skill-bar">
+                        <div class="skill-progress"></div>
+                    </div>
+                    <span class="skill-percent">0%</span>
+                </div>
+            </div>
+            <div class="skill-item" data-skill="85" data-name="MySQL">
+                <img src="../images/MySQL.png" alt="MySQL" loading="lazy">
+                <div class="tooltip">
+                    <span class="skill-name">MySQL</span>
+                    <div class="skill-bar">
+                        <div class="skill-progress"></div>
+                    </div>
+                    <span class="skill-percent">0%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>

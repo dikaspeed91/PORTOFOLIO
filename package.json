@@ -1,0 +1,27 @@
+{
+  "name": "portfolio-website",
+  "version": "1.0.0",
+  "description": "Modern Portfolio with Firebase Chat - Neon Eva Theme",
+  "main": "index.html",
+  "scripts": {
+    "dev": "live-server --port=5500 --host=localhost --open=index.html",
+    "preview": "live-server --port=5500 --host=0.0.0.0",
+    "lint": "eslint . --ext .js",
+    "lint:fix": "eslint . --ext .js --fix"
+  },
+  "keywords": ["portfolio", "firebase", "chat", "modern-ui"],
+  "author": "M. Andika Nur Allanuril",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "eslint": "^8.57.0"
+  },
+  "browserslist": [
+    "> 0.5%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "volta": {
+    "node": "20.17.0"
+  }
+}

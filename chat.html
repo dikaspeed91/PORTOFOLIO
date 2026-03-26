@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Chat - Neon Messenger Style</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/evangelion-theme.css">
+    <link rel="stylesheet" href="css/modern-ui.css">
+    <style>
+        /* Modern Messenger Neon Theme */
+        :root {
+            --eva-green: #00FF41;
+            --eva-purple: #8B00FF;
+            --eva-orange: #FF4500;
+            --bg-dark: rgba(10, 10, 20, 0.95);
+            --glass-dark: rgba(20, 20, 40, 0.9);
+            --bubble-sent: linear-gradient(135deg, var(--eva-purple), var(--eva-green));
+            --bubble-recv: rgba(60, 65, 80, 0.8);
+            --glow-neon: 0 0 20px rgba(0, 255, 65, 0.6);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(10,10,20,0.9)), url('images/1.jpg') center/cover fixed;
+            color: #e4e6ea; min-height: 100vh; 
+        }
+
+        .chat-app { 
+            height: 100vh; display: flex; flex-direction: column; 
+        }
+
+        header { 
+            background: var(--glass-dark); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
+            border-bottom: 1px solid rgba(0,255,65,0.3); box-shadow: var(--glow-neon);
+            flex-shrink: 0;
+        }
+
+        .header-nav { 
+            display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; padding: 0 1rem;
+            flex-wrap: nowrap;
+        }
+
+        .header-nav > * { flex-shrink: 0; }
+
+        .back-btn { 
+            display: flex; align-items: center; gap: 0.75rem; color: #e4e6ea; text-decoration: none; padding: 0.75rem 1.5rem; 
+            border: 1px solid rgba(0,255,65,0.4); border-radius: 12px; transition: all 0.3s; font-weight: 500; 
+        }
+
+        .back-btn:hover { background: rgba(0,255,65,0.1); box-shadow: var(--glow-neon); }
+
+        .auth-controls { 
+            display: flex; gap: 0.75rem; align-items: center; flex-direction: row; justify-content: flex-end; 
+            flex-wrap: nowrap;
+            min-width: 0;
+        }
+
+        .login-buttons { display: flex; gap: 0.5rem; flex-shrink: 0; }
+
+        .btn { 
+            padding: 0.75rem 1.5rem; border-radius: 12px; border: none; cursor: pointer; font-weight: 500; 
+            transition: all 0.3s; display: flex; align-items: center; gap: 0.5rem; text-decoration: none; 
+        }
+
+        .btn-primary { background: var(--bubble-sent); color: white; box-shadow: 0 4px 15px rgba(139,0,255,0.4); }
+
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(139,0,255,0.6); }
+
+        .btn-secondary { background: rgba(255,255,255,0.1); color: #e4e6ea; border: 1px solid rgba(0,255,65,0.3); }
+
+        .btn-secondary:hover { background: rgba(0,255,65,0.2); box-shadow: var(--glow-neon); }
+
+        .user-status { background: rgba(66,184,131,0.9); color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; font-weight: 500; }
+
+        /* Main Chat Layout */
+        .chat-main { flex: 1; display: flex; max-width: 1400px; margin: 0 auto; padding: 0; height: 100%; box-sizing: border-box; }
+
+        /* Sidebar - Left Panel */
+        .chat-sidebar { 
+            width: 320px; flex-shrink: 0; background: var(--glass-dark); 
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-right: 1px solid rgba(0,255,65,0.2); 
+            display: flex; flex-direction: column; 
+        }
+
+        .sidebar-header { padding: 1.5rem; border-bottom: 1px solid rgba(0,255,65,0.2); font-weight: 600; font-size: 1.1rem; color: var(--eva-green); }
+
+        .chat-list { flex: 1; overflow-y: auto; padding: 0.5rem 0; }
+
+        .chat-item { 
+            padding: 1rem 1.5rem; cursor: pointer; border-radius: 0 20px 20px 0; margin-right: 1px; 
+            position: relative;
+        }
+
+        .chat-item.unread::after {
+            content: '';
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--eva-green);
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: var(--glow-neon);
+        }
+
+        .chat-item:hover { background: rgba(0,255,65,0.1); box-shadow: inset 5px 0 0 var(--eva-green); }
+
+        .chat-item.active { background: rgba(0,255,65,0.2); box-shadow: inset 5px 0 0 var(--eva-green); }
+
+        .chat-avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--bubble-sent); display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; flex-shrink: 0; }
+
+        .chat-info h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.25rem; }
+
+        .chat-preview { font-size: 0.85rem; color: #9ca3af; }
+
+        .online-dot { position: absolute; right: 1.5rem; width: 12px; height: 12px; background: var(--eva-green); border-radius: 50%; box-shadow: 0 0 0 2px var(--glass-dark); }
+
+        /* Main Chat Area */
+        .chat-main-area { flex: 1; display: flex; flex-direction: column; padding: 0 1rem 1rem; box-sizing: border-box; }
+
+        /* Chat Header */
+        .chat-header { 
+            background: var(--glass-dark); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
+            padding: 1rem 1.5rem; border-radius: 20px 20px 0 0; border-bottom: 1px solid rgba(0,255,65,0.2); 
+            display: flex; align-items: center; gap: 1rem; flex-shrink: 0;
+            flex-wrap: nowrap;
+        }
+
+        .chat-header > div { flex-shrink: 0; }
+
+        .chat-header-avatar { 
+            width: 56px; height: 56px; border-radius: 50%; background: var(--bubble-sent); 
+            display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; 
+            position: relative; 
+        }
+
+        .chat-header-info h2 { font-size: 1.4rem; font-weight: 600; }
+
+        .chat-status { font-size: 0.9rem; color: #9ca3af; }
+
+        /* Messages Container */
+        .messages-container { 
+            flex: 1; background: var(--glass-dark); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); 
+            padding: 1.5rem; overflow-y: auto; border-radius: 0 0 20px 20px; 
+            display: flex; flex-direction: column; gap: 1.25rem; scrollbar-width: thin; 
+        }
+
+        .messages-container::-webkit-scrollbar { 
+            width: 8px; height: 8px;
+        }
+        .messages-container::-webkit-scrollbar-track { 
+            background: rgba(255,255,255,0.05); 
+            border-radius: 10px;
+        }
+        .messages-container::-webkit-scrollbar-thumb { 
+            background: linear-gradient(var(--eva-green), var(--eva-purple)); 
+            border-radius: 10px; 
+            box-shadow: 0 0 10px rgba(0,255,65,0.3);
+        }
+        .messages-container::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(var(--eva-purple), var(--eva-orange));
+        }
+
+        /* Message Bubbles */
+        .message { 
+            display: flex; gap: 1rem; align-items: flex-end; animation: messageSlide 0.4s ease-out; max-width: 85%; 
+        }
+
+        @keyframes messageSlide {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .message.sent { flex-direction: row-reverse; }
+
+        .message-avatar { 
+            width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0; background: rgba(255,255,255,0.2); 
+            display: flex; align-items: center; justify-content: center; font-size: 0.85rem; 
+        }
+
+        .message-bubble { 
+            max-width: calc(100% - 50px); padding: 1rem 1.25rem; border-radius: 20px; position: relative; 
+            word-wrap: break-word; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); 
+        }
+
+        .message.sent .message-bubble { 
+            background: var(--bubble-sent); color: white; border-bottom-left-radius: 6px; 
+            box-shadow: 0 8px 25px rgba(139,0,255,0.4); 
+        }
+
+        .message:not(.sent) .message-bubble { 
+            background: var(--bubble-recv); color: #e4e6ea; border-bottom-right-radius: 6px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3); 
+        }
+
+        .message-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem; font-size: 0.85rem; flex-wrap: nowrap; min-width: 0; }
+
+        .message-author { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 1; max-width: 120px; }
+
+        .message-author { font-weight: 600; }
+
+        .message-time { color: rgba(255,255,255,0.6); }
+
+        /* Typing Indicator */
+        .typing-indicator { 
+            display: flex; align-items: center; gap: 0.75rem; padding: 0.875rem 1rem; 
+            background: var(--bubble-recv); border-radius: 20px; border-bottom-right-radius: 6px; 
+            max-width: 70%; font-style: italic; color: #9ca3af; font-size: 0.875rem; 
+            flex-wrap: nowrap;
+        }
+
+        .typing-indicator > span { flex-shrink: 0; }
+
+        .typing-dots { display: flex; gap: 0.25rem; }
+        .typing-dots span { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.5); animation: typingPulse 1.4s infinite; }
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingPulse {
+            0%, 60%, 100% { transform: scale(1); opacity: 0.4; }
+            30% { transform: scale(1.3); opacity: 1; }
+        }
+
+        /* Input Area - Sticky Bottom */
+        .input-area { 
+            background: var(--glass-dark); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
+            padding: 1rem 1.5rem; border-top: 1px solid rgba(0,255,65,0.2); border-radius: 20px 20px 0 0; 
+            flex-shrink: 0;
+        }
+
+        .input-container { 
+            display: flex; gap: 1rem; align-items: flex-end; background: rgba(40,45,60,0.6); 
+            padding: 1rem 1.5rem; border-radius: 30px; border: 1px solid rgba(0,255,65,0.3); 
+        }
+
+        #messageInput { 
+            flex: 1; background: none; border: none; outline: none; color: #e4e6ea; 
+            font-size: 1rem; line-height: 1.5; resize: none; max-height: 120px; font-family: inherit; 
+        }
+
+        #messageInput::placeholder { color: #9ca3af; }
+
+        #sendBtn { 
+            width: 52px; height: 52px; border-radius: 50%; background: var(--bubble-sent); 
+            border: none; color: white; font-size: 1.1rem; cursor: pointer; flex-shrink: 0; 
+            display: flex; align-items: center; justify-content: center; transition: all 0.3s; 
+            box-shadow: 0 4px 15px rgba(139,0,255,0.4); 
+        }
+
+        #sendBtn:hover { transform: scale(1.1) rotate(10deg); box-shadow: 0 8px 25px rgba(139,0,255,0.6); }
+
+        /* Reply Info */
+        .reply-info { 
+            background: rgba(139,0,255,0.15); border: 1px solid rgba(139,0,255,0.3); 
+            border-radius: 16px; padding: 0.875rem 1rem; margin-bottom: 1rem; position: relative; 
+            display: flex; align-items: center; gap: 0.75rem; flex-wrap: nowrap;
+        }
+
+        .reply-preview { 
+            font-style: italic; color: rgba(255,255,255,0.9); font-size: 0.875rem; 
+            background: rgba(255,255,255,0.08); padding: 0.5rem 0.75rem; border-radius: 10px; 
+            flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+
+        .reply-preview { 
+            font-style: italic; color: rgba(255,255,255,0.8); font-size: 0.95rem; 
+            background: rgba(255,255,255,0.05); padding: 0.75rem; border-radius: 12px; 
+        }
+
+        .cancel-reply { 
+            position: absolute; top: 0.75rem; right: 1rem; background: none; border: 1px solid rgba(255,255,255,0.3); 
+            color: #e4e6ea; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; 
+            font-size: 0.9rem; cursor: pointer; transition: all 0.3s; 
+        }
+
+        .cancel-reply:hover { background: rgba(255,255,255,0.2); color: white; }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .chat-sidebar { 
+                position: fixed; left: -100%; width: 280px; height: 100vh; z-index: 1000; transition: left 0.4s; 
+            }
+            .chat-sidebar.open { left: 0; }
+            .sidebar-toggle { display: flex; padding: 1rem; background: var(--glass-dark); border-right: 1px solid rgba(0,255,65,0.3); cursor: pointer; }
+            .chat-main-area { padding-left: 0; }
+        }
+
+        .empty-state { text-align: center; padding: 4rem 2rem; color: #9ca3af; }
+        .empty-state i { font-size: 4rem; opacity: 0.5; margin-bottom: 1rem; display: block; }
+    </style>
+</head>
+<body class="dark">
+    <div class="chat-app">
+        <header>
+            <nav class="header-nav">
+                <a href="index.html" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> Portfolio
+                </a>
+                <div class="auth-controls" id="authSection">
+                    <button id="darkToggle" class="btn btn-secondary" title="Toggle Dark/Light Mode">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                    <div class="login-buttons">
+                        <button id="googleLogin" class="btn btn-primary">
+                            <i class="fab fa-google"></i> Google
+                        </button>
+                        <button id="githubLogin" class="btn btn-secondary">
+                            <i class="fab fa-github"></i> GitHub
+                        </button>
+                    </div>
+                    <span id="userStatus" class="user-status hidden">Online</span>
+                    <button id="logoutBtn" class="btn btn-secondary hidden">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </nav>
+        </header>
+
+        <div class="chat-main">
+            <!-- Sidebar -->
+            <div class="chat-sidebar" id="chatSidebar">
+                <div class="sidebar-header">
+                    <i class="fas fa-comments"></i> Recent Chats
+                </div>
+                <div class="chat-list" id="chatList">
+                    <!-- Dynamic user list -->
+                </div>
+            </div>
+
+            <!-- Main Chat -->
+            <div class="chat-main-area">
+                <!-- Chat Header -->
+                <div class="chat-header">
+                    <div class="chat-header-avatar" id="chatHeaderAvatar">R</div>
+                    <div>
+                        <h2 id="chatTitle">Chat Room</h2>
+                        <div class="chat-status" id="chatStatus">Online • Last seen today</div>
+                    </div>
+                </div>
+
+                <!-- Messages -->
+                <div class="messages-container" id="messagesContainer">
+                    <div class="empty-state">
+                        <i class="fas fa-comments"></i>
+                        <p>Welcome to Neon Chat</p>
+                        <p class="text-sm opacity-75 mt-2">Messages will appear here</p>
+                    </div>
+                </div>
+
+                <!-- Reply Info -->
+                <div class="reply-info hidden" id="replyInfo">
+                    <div class="reply-preview" id="replyPreview">Replying to...</div>
+                    <button class="cancel-reply" id="cancelReply" title="Cancel Reply">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- Input -->
+                <div class="input-area">
+                    <div class="typing-indicator hidden" id="typingIndicator">
+                        <div class="typing-dots">
+                            <span></span><span></span><span></span>
+                        </div>
+                        Someone is typing...
+                    </div>
+                    <div class="input-container">
+                        <textarea id="messageInput" rows="1" placeholder="Type a neon message..."></textarea>
+                        <button id="sendBtn" title="Send">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+
+    <script>
+        // Modern Chat Controller
+        class NeonChat {
+            constructor() {
+                this.elements = {
+                    messagesContainer: document.getElementById('messagesContainer'),
+                    chatList: document.getElementById('chatList'),
+                    messageInput: document.getElementById('messageInput'),
+                    sendBtn: document.getElementById('sendBtn'),
+                    replyInfo: document.getElementById('replyInfo'),
+                    replyPreview: document.getElementById('replyPreview'),
+                    cancelReply: document.getElementById('cancelReply'),
+                    typingIndicator: document.getElementById('typingIndicator'),
+                    authSection: document.getElementById('authSection'),
+                    userStatus: document.getElementById('userStatus'),
+                    googleLogin: document.getElementById('googleLogin'),
+                    githubLogin: document.getElementById('githubLogin'),
+                    logoutBtn: document.getElementById('logoutBtn'),
+                    darkToggle: document.getElementById('darkToggle'),
+                    chatSidebar: document.getElementById('chatSidebar'),
+                    chatHeaderAvatar: document.getElementById('chatHeaderAvatar'),
+                    chatTitle: document.getElementById('chatTitle'),
+                    chatStatus: document.getElementById('chatStatus')
+                };
+
+                this.currentUser = null;
+                this.currentReplyId = null;
+                this.unsubscribeChats = null;
+                this.recentUsers = new Map();
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.setupFirebase();
+                this.setupDarkMode();
+            }
+
+            bindEvents() {
+                this.elements.sendBtn.onclick = () => this.sendMessage();
+                this.elements.messageInput.onkeypress = (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.sendMessage();
+                    }
+                };
+                this.elements.messageInput.oninput = this.autoResize.bind(this);
+                this.elements.cancelReply.onclick = () => this.cancelReply();
+                this.elements.googleLogin.onclick = () => this.login('google');
+                this.elements.githubLogin.onclick = () => this.login('github');
+                this.elements.logoutBtn.onclick = () => this.logout();
+            }
+
+            setupDarkMode() {
+                const isDark = localStorage.getItem('darkMode') !== 'false';
+                document.body.classList.toggle('dark', isDark);
+                this.elements.darkToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+                this.elements.darkToggle.onclick = () => {
+                    const newDark = !document.body.classList.contains('dark');
+                    document.body.classList.toggle('dark', newDark);
+                    this.elements.darkToggle.innerHTML = newDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+                    localStorage.setItem('darkMode', newDark);
+                };
+            }
+
+            async setupFirebase() {
+                if (window.firebaseConfig) firebase.initializeApp(window.firebaseConfig);
+                const auth = firebase.auth();
+                const db = firebase.firestore();
+                const chatCollection = db.collection('chats');
+
+                auth.onAuthStateChanged(async (user) => {
+                    this.currentUser = user;
+                    if (user) {
+                        this.elements.userStatus.textContent = `${user.displayName || user.email?.split('@')[0]} • Online`;
+                        this.elements.userStatus.classList.remove('hidden');
+                        this.elements.authSection.querySelector('.login-buttons').classList.add('hidden');
+                        this.elements.logoutBtn.classList.remove('hidden');
+                        await this.loadChat(chatCollection);
+                    } else {
+                        this.showEmptyState();
+                        this.elements.userStatus.classList.add('hidden');
+                        this.elements.authSection.querySelector('.login-buttons').classList.remove('hidden');
+                        this.elements.logoutBtn.classList.add('hidden');
+                        if (this.unsubscribeChats) this.unsubscribeChats();
+                    }
+                });
+            }
+
+            async loadChat(chatCollection) {
+                if (this.unsubscribeChats) this.unsubscribeChats();
+                
+                this.unsubscribeChats = chatCollection.orderBy('timestamp', 'desc').limit(50).onSnapshot((snapshot) => {
+                    const messages = [];
+                    const users = new Map();
+
+                    snapshot.forEach((doc) => {
+                        const data = doc.data();
+                        messages.push({ id: doc.id, ...data });
+
+                        // Track recent users
+                        if (data.userId !== this.currentUser?.uid) {
+                            users.set(data.userId, {
+                                name: data.userName,
+                                photoURL: data.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(data.userName)}&size=48&background=8B00FF&color=fff`,
+                                lastMsg: data.text.substring(0, 30) + '...',
+                                time: data.timestamp?.toDate() ? new Date(data.timestamp.toDate()).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''
+                            });
+                        }
+                    });
+
+                    this.renderMessages(messages);
+                    this.renderChatList(Array.from(users.values()).slice(0, 10)); // Top 10 recent
+                this.scrollToBottom(true);  // Force scroll to new message
+                });
+            }
+
+            renderMessages(messages) {
+                this.elements.messagesContainer.innerHTML = messages.map(msg => `
+                    <div class="message ${msg.userId === this.currentUser?.uid ? 'sent' : ''}">
+                        <div class="message-avatar">${msg.userName?.[0]?.toUpperCase() || 'U'}</div>
+                        <div class="message-bubble">
+                            <div class="message-header">
+                                <span class="message-author">${msg.userName}</span>
+                                <span class="message-time">${msg.timestamp ? new Date(msg.timestamp.toDate()).toLocaleString('id-ID', { hour: '2-digit', minute: '2-digit' }) : ''}</span>
+                            </div>
+                            <div class="message-text">${this.escapeHtml(msg.text).replace(/\n/g, '<br>')}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            renderChatList(users) {
+                this.elements.chatList.innerHTML = users.map(user => `
+                    <div class="chat-item active">
+                        <div class="chat-avatar" style="background-image: url(${user.photoURL})">${user.name[0]?.toUpperCase()}</div>
+                        <div class="chat-info">
+                            <h4>${user.name}</h4>
+                            <div class="chat-preview">${user.lastMsg}</div>
+                        </div>
+                        <div class="online-dot"></div>
+                    </div>
+                `).join('') || '<div class="empty-state p-8"><p>No recent chats</p></div>';
+            }
+
+            async sendMessage() {
+                const text = this.elements.messageInput.value.trim();
+                if (!text || !this.currentUser) return;
+
+                const chatCollection = db.collection('chats');
+                const msgData = {
+                    text,
+                    userId: this.currentUser.uid,
+                    userName: this.currentUser.displayName || this.currentUser.email.split('@')[0],
+                    photoURL: this.currentUser.photoURL,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    replyTo: this.currentReplyId || null
+                };
+
+                this.elements.sendBtn.disabled = true;
+                try {
+                    await chatCollection.add(msgData);
+                    this.elements.messageInput.value = '';
+                    this.autoResize();
+                    this.cancelReply();
+                } catch (e) {
+                    alert('Failed to send: ' + e.message);
+                }
+                this.elements.sendBtn.disabled = false;
+                this.elements.messageInput.focus();
+            }
+
+            cancelReply() {
+                this.currentReplyId = null;
+                this.elements.replyInfo.classList.add('hidden');
+                this.elements.messageInput.placeholder = 'Type a neon message...';
+            }
+
+            autoResize() {
+                this.elements.messageInput.style.height = 'auto';
+                this.elements.messageInput.style.height = Math.min(this.elements.messageInput.scrollHeight, 120) + 'px';
+            }
+
+            scrollToBottom(force = false) {
+                const container = this.elements.messagesContainer;
+                if (force || container.scrollTop + container.clientHeight >= container.scrollHeight - 50) {
+                    container.scrollTop = container.scrollHeight;
+                }
+            }
+
+            escapeHtml(text) {
+                const map = { '&': '&amp;', '<': '<', '>': '>', '"': '"', "'": '&#039;' };
+                return text.replace(/[&<>"']/g, m => map[m]);
+            }
+
+            async login(provider) {
+                if (location.protocol !== 'http:' && location.protocol !== 'https:') {
+                    alert('Popup auth requires HTTP/HTTPS. Use file:// live server or deploy to test.');
+                    return;
+                }
+                const authProviders = {
+                    google: new firebase.auth.GoogleAuthProvider(),
+                    github: new firebase.auth.GithubAuthProvider()
+                };
+                try {
+                    await firebase.auth().signInWithPopup(authProviders[provider]);
+                } catch (e) {
+                    console.error('Auth error:', e);
+                    alert(`${provider} login failed. Check Firebase console auth providers enabled. Error: ${e.message}`);
+                }
+            }
+
+            showEmptyState() {
+                this.elements.messagesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-comments"></i>
+                        <p>Neon Chat Ready</p>
+                        <p class="text-sm opacity-75 mt-2">Login to start messaging</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Init App
+        const chat = new NeonChat();
+    </script>
+</body>
+</html>
